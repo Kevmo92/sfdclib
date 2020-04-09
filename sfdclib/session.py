@@ -52,14 +52,18 @@ xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'>
             raise Exception("Could not log in. Code: %s Message: %s" % (
                 root.find('soapenv:Body/soapenv:Fault/faultcode', SfdcSession._XML_NAMESPACES).text,
                 root.find('soapenv:Body/soapenv:Fault/faultstring', SfdcSession._XML_NAMESPACES).text))
-        self._session_id = root.find('soapenv:Body/d:loginResponse/d:result/d:sessionId', SfdcSession._XML_NAMESPACES).text
+        self._session_id = root.find('soapenv:Body/d:loginResponse/d:result/d:sessionId',
+                                     SfdcSession._XML_NAMESPACES).text
         server_url = root.find('soapenv:Body/d:loginResponse/d:result/d:serverUrl', SfdcSession._XML_NAMESPACES).text
         self._instance = re.search("""https://(.*).salesforce.com/.*""", server_url).group(1)
 
     def get_server_url(self):
         if not self._instance:
-            return SfdcSession._LOGIN_URL.format(**{'instance': 'test' if self._is_sandbox else 'login'})
-        return SfdcSession._LOGIN_URL.format(**{'instance': self._instance})
+            url = SfdcSession._LOGIN_URL.format(**{'instance': 'test' if self._is_sandbox else 'login'})
+        url = SfdcSession._LOGIN_URL.format(**{'instance': self._instance})
+        if re.search(r'cloudforce', url):
+            url = re.sub(r'\.salesforce\.com$', '', url)
+        return url
 
     def get_soap_api_uri(self):
         return SfdcSession._SOAP_API_BASE_URI.format(**{'version': self._api_version})
