@@ -5,11 +5,11 @@ from setuptools import setup
 
 setup(
     name='sfdclib',
-    version='0.2.26',
-    author='Andrey Shevtsov',
-    author_email='ashevtsov@rbauction.com',
+    version='0.2.22',
+    author='Andrey Shevtsov & KevOps',
+    author_email='ah.you@thought.com',
     packages=['sfdclib'],
-    url='https://github.com/rbauction/sfdclib',
+    url='https://github.com/Kevmo92/sfdclib',
     license='MIT',
     description=("SFDClib is a Salesforce.com Metadata API and Tooling "
                  "API client built for Python 2.7, 3.3 and 3.4."),
