@@ -110,7 +110,7 @@ class SfdcMetadataApi:
 
         unit_test_errors = []
         deployment_errors = []
-        failed_count = result.find('mt:numberComponentErrors', self._XML_NAMESPACES)
+        failed_count = int(result.find('mt:numberComponentErrors', self._XML_NAMESPACES).text)
         if state == 'Failed' or failed_count > 0:
             # Deployment failures
             failures = result.findall('mt:details/mt:componentFailures', self._XML_NAMESPACES)
@@ -135,7 +135,7 @@ class SfdcMetadataApi:
 
         deployment_detail = {
             'total_count': result.find('mt:numberComponentsTotal', self._XML_NAMESPACES).text,
-            'failed_count': failed_count.text,
+            'failed_count': result.find('mt:numberComponentErrors', self._XML_NAMESPACES).text,
             'deployed_count': result.find('mt:numberComponentsDeployed', self._XML_NAMESPACES).text,
             'errors': deployment_errors
         }
