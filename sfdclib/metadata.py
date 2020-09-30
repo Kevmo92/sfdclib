@@ -100,6 +100,13 @@ class SfdcMetadataApi:
 
         return result
 
+    @staticmethod
+    def get_component_error_count(value):
+        try:
+            return int(value)
+        except:
+            return 0
+
     def check_deploy_status(self, async_process_id):
         """ Checks whether deployment succeeded """
         result = self._retrieve_deploy_result(async_process_id)
@@ -110,7 +117,7 @@ class SfdcMetadataApi:
 
         unit_test_errors = []
         deployment_errors = []
-        failed_count = int(result.find('mt:numberComponentErrors', self._XML_NAMESPACES).text)
+        failed_count = self.get_component_error_count(result.find('mt:numberComponentErrors', self._XML_NAMESPACES).text)
         if state == 'Failed' or failed_count > 0:
             # Deployment failures
             failures = result.findall('mt:details/mt:componentFailures', self._XML_NAMESPACES)
